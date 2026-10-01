@@ -1,11 +1,17 @@
 ---
 name: setup-pstack
-description: Configure pstack model roles and reasoning effort for the available Codex agent tools. Use for setup-pstack, configure pstack models, or changing pstack's budget.
+description: Configure pstack model roles, reasoning effort, and a supplied Codex gateway for models from different providers. Use for setup-pstack, configure pstack models, connect a gateway, or changing pstack's budget.
 ---
 
 Read [Codex runtime](../../references/codex-runtime.md) before using this skill.
 
 # Setup pstack
+
+For models from different providers, read [Gateway setup](references/gateway.md).
+Configure the supplied gateway with Codex's native provider settings, then
+continue with role selection below. Do not change providers for ordinary
+OpenAI model selection. Without connection details, prepare the configuration
+workflow and report live activation as pending.
 
 Write `<project>/.codex/pstack-models.md`, or the user-level file if the user
 requests personal settings. Each pstack skill reads this file explicitly.

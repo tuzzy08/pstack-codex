@@ -52,6 +52,16 @@ them so a separate Cursor Team Kit installation is not required.
 
 - The available Codex agent tools do not guarantee access to Claude or Grok.
   Independent parent-model attempts do not provide model-family diversity.
+  Setup now supports a supplied Responses-compatible gateway through native
+  Codex provider settings. It keeps role model names in the existing file.
+  The configuration helper validates URLs, environment variable names, custom
+  provider IDs, catalog membership, and refuses to overwrite existing files.
+  A gateway connection, model routes, and credentials are still needed for
+  live provider, tool, and follow-up verification. No gateway service is bundled.
+  The helper and file-preservation checks pass locally. Installed Codex 0.142.5
+  loaded a temporary generated profile with `debug prompt-input`; it rendered
+  the prompt locally. The temporary profile was removed. This checks native
+  configuration loading, not a gateway connection or upstream model route.
 - Mode reminders now use two Codex command hooks. They keep an explicit
   selection for one chat and restore it on later turns, resume, or compaction.
   They need Python and Codex hook trust. This machine has trusted both hooks.

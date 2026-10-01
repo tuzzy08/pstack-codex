@@ -66,6 +66,14 @@ Read `<project>/.codex/pstack-models.md` and, when present,
 Project values override user values by role. These are explicitly read files,
 not always-applied rules. A missing role uses `inherit-parent`.
 
+Roles can select models from different providers through one configured Codex
+gateway. Use [Gateway setup](../skills/setup-pstack/references/gateway.md) when
+the user requests this connection. Codex owns provider authentication and
+transport; pstack keeps model names in the existing role file. Use the active
+gateway's catalog and the current agent tool's allowed models. Provider access
+alone does not establish model availability or tool support. The main chat
+keeps its selected model; role choices apply when work is delegated.
+
 One line defines one role. A panel list defines one model entry per seat.
 `auto` and `inherit-parent` mean omit the model override. Use only model IDs
 supported by the current tool. Reasoning effort is a separate field, not part

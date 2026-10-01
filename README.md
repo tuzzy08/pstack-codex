@@ -22,6 +22,12 @@ Review and trust the two pstack hooks in Codex's `/hooks` menu. They need
 Python. Start a new chat and use `$pstack:poteto-mode Your task here`.
 Use `$pstack:poteto-mode off` to cancel the mode.
 
+Use `$pstack:setup-pstack` to select role models. For models from different
+providers, it can prepare one native Codex gateway connection, then use that
+gateway's model names for code, judgment, and review. Supply a compatible
+gateway URL, model routes, and a credential environment variable name.
+See [gateway setup](pstack-codex/skills/setup-pstack/references/gateway.md).
+
 Read the [package guide](pstack-codex/README.md) for commands and checks.
 The [review](REVIEW.md) records the changes, evidence, and remaining limits.
 

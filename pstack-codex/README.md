@@ -52,6 +52,14 @@ Models inherit the current chat by default. `$pstack:setup-pstack` can write
 `.codex/pstack-models.md` in your project. It uses model IDs and effort fields
 from the available agent tool. It does not assume access to Claude or Grok.
 
+For models from different providers, setup now supports one supplied Codex
+gateway. A Python helper prepares a native configuration layer without API
+keys or overwriting existing files. The CLI uses a profile; desktop activation
+uses the user configuration and an app restart. Role models still use the
+same file and native agent tools. Read [Gateway setup](skills/setup-pstack/references/gateway.md)
+for connection details, catalog checks, and live verification. This port does
+not deploy a gateway or supply provider credentials.
+
 Read [Codex runtime](references/codex-runtime.md) for agent tools, history,
 permissions, scheduled tasks, and Windows commands. This core port does not
 include the optional Benny event automation pack. `make-bot-ui` needs a

@@ -4,6 +4,7 @@ import json
 import shutil
 import subprocess
 import tempfile
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,8 +22,34 @@ def check():
     log = load("decision_log", PLUGIN / "skills/show-me-your-work/scripts/log.py")
     mode = load("mode", PLUGIN / "hooks/mode.py")
     audit = load("audit", PLUGIN / "skills/poteto-mode/scripts/worktree-audit.py")
+    gateway = load("gateway", PLUGIN / "skills/setup-pstack/scripts/gateway.py")
     with tempfile.TemporaryDirectory(prefix="pstack-check-") as folder:
         root = Path(folder).resolve()
+        options = dict(url="https://gateway.example.com/v1", model="code-model", env_key="CODEX_GATEWAY_API_KEY")
+        catalog = root / "models.json"
+        catalog.write_text(json.dumps({"models": [{"slug": "code-model"}, {"slug": "review-model"}]}))
+        config = tomllib.loads(gateway.render(**options, catalog=catalog, check_models=["review-model"]))
+        assert config["model_catalog_json"] == str(catalog)
+        assert config["model_providers"]["pstack-gateway"]["wire_api"] == "responses"
+        assert config["model_providers"]["pstack-gateway"]["env_key"] == "CODEX_GATEWAY_API_KEY"
+        assert tomllib.loads(gateway.render(**dict(options, url="http://[::1]:8080/v1")))
+        for invalid in [dict(url="http://remote.example/v1"), dict(url="https://key@gateway.example/v1"),
+                        dict(url="https://gateway.example/v1?key=secret"), dict(url="https://gateway.example:bad/v1"),
+                        dict(env_key="key-with-hyphens"), dict(provider="openai"), dict(model="bad\nmodel"),
+                        dict(catalog=catalog, check_models=["missing-model"])]:
+            try:
+                gateway.render(**(options | invalid))
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("invalid gateway configuration accepted")
+        output = root / "pstack-gateway.config.toml"
+        command = ["python", str(PLUGIN / "skills/setup-pstack/scripts/gateway.py"), "--url", options["url"],
+                   "--model", options["model"], "--env-key", options["env_key"], "--output", str(output)]
+        assert subprocess.run(command, capture_output=True).returncode == 0
+        before = output.read_bytes()
+        assert subprocess.run(command, capture_output=True).returncode != 0
+        assert output.read_bytes() == before, "gateway setup must preserve existing configuration"
         if shutil.which("node"):
             scripts = PLUGIN / "skills/poteto-mode/scripts"
             watcher = scripts / "watch-pr/watch-pr"
@@ -112,7 +139,7 @@ def check():
         result = subprocess.run(["python", str(PLUGIN / "skills/poteto-mode/scripts/worktree-audit.py"), str(repo), "--skip-prs"], capture_output=True, text=True)
         assert result.returncode == 0, result.stderr
         assert "SIZE_BYTES\tAGE" in result.stdout and str(dirty) in result.stdout
-    print("PASS: Node entry points and task records, dependency guard, decision log, chat mode isolation and cancellation, worktree paths, retained files, and read-only audit")
+    print("PASS: gateway configuration and file preservation, Node entry points and task records, dependency guard, decision log, chat mode isolation and cancellation, worktree paths, retained files, and read-only audit")
 
 
 if __name__ == "__main__":
