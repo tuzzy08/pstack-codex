@@ -1,0 +1,5 @@
+cursor-plugins-source/
+cursor-reference-audit.txt
+**/node_modules/
+.port-work/
+**/__pycache__/
