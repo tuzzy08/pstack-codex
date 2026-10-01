@@ -118,6 +118,13 @@ of the core skills. The original optional pack remains in the pinned
   in the temporary test directory. The check now resolves that directory
   before Git creates the worktrees. The watcher detected the failed check
   and returned `BLOCKER` with exit code 4.
+  [The next run](https://github.com/tuzzy08/pstack-codex/actions/runs/36873094050)
+  passed on Ubuntu and Windows at commit `d9f009f`. Both jobs checked the
+  package, portable runtime, all 52 helper tests, and watcher types.
+  The watcher then returned `BLOCKER` with exit code 6 for the draft gate,
+  and `READY` with exit code 0 when `--allow-draft` was supplied. The PR
+  stayed a draft. No review comments, approval, merge, or branch deletion
+  were performed.
   Desktop reminder delivery still needs a real user mode-selection message.
 - CLI plugin discovery first stopped at an invalid feature value in
   `C:\Users\Lenovo\.codex\config.toml`. On follow-up, the single unsupported
@@ -126,7 +133,8 @@ of the core skills. The original optional pack remains in the pinned
   All other settings were checked against the original and are unchanged.
   `codex features list` and `codex plugin list` now succeed. The local
   marketplace is registered and version `0.15.5-codex.2` is installed and
-  enabled. The dedicated GitHub PR workflow test is in progress.
+  enabled. The dedicated GitHub PR test covers creation, push, CI failure
+  detection, correction, passing checks, and the draft gate.
 
 The local plugin is installed and enabled. Use `$pstack:poteto-mode` in a new
 chat. Codex exposes plugin skills with the `pstack:` prefix. The installed
