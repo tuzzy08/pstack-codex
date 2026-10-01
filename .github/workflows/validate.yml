@@ -1,0 +1,42 @@
+name: Validate port
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: '1.4.2'
+      - name: Install retained helper dependencies
+        working-directory: pstack-codex/skills/poteto-mode/scripts
+        run: bun install --frozen-lockfile
+      - name: Check package and portable runtime
+        run: |
+          python tools/validate_port.py
+          python tools/check_runtime.py
+      - name: Test retained helpers
+        working-directory: pstack-codex/skills/poteto-mode/scripts
+        run: bun test --timeout 30000 orch watch-pr
+      - name: Check watcher types
+        working-directory: pstack-codex/skills/poteto-mode/scripts
+        run: bun run typecheck
