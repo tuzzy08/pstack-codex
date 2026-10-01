@@ -22,7 +22,7 @@ def check():
     mode = load("mode", PLUGIN / "hooks/mode.py")
     audit = load("audit", PLUGIN / "skills/poteto-mode/scripts/worktree-audit.py")
     with tempfile.TemporaryDirectory(prefix="pstack-check-") as folder:
-        root = Path(folder)
+        root = Path(folder).resolve()
         if shutil.which("node"):
             scripts = PLUGIN / "skills/poteto-mode/scripts"
             watcher = scripts / "watch-pr/watch-pr"

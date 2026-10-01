@@ -113,6 +113,11 @@ of the core skills. The original optional pack remains in the pinned
   The user supplied `tuzzy08/pstack-codex` for a dedicated PR test. The
   repository was empty; a minimal main branch was initialized. The port and
   Windows/Linux validation workflow are on `codex/pstack-port`.
+  [Draft PR #1](https://github.com/tuzzy08/pstack-codex/pull/1) is open.
+  Its first Ubuntu check passed. Its Windows check found a short-path alias
+  in the temporary test directory. The check now resolves that directory
+  before Git creates the worktrees. The watcher detected the failed check
+  and returned `BLOCKER` with exit code 4.
   Desktop reminder delivery still needs a real user mode-selection message.
 - CLI plugin discovery first stopped at an invalid feature value in
   `C:\Users\Lenovo\.codex\config.toml`. On follow-up, the single unsupported
